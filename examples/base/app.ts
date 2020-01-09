@@ -1,4 +1,4 @@
-import axios from '../../src/index'
+import axios from '../../src/ts-axios'
 
 // 参数为数组
 axios({
