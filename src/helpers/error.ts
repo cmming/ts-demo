@@ -25,3 +25,15 @@ export class AxiosError extends Error {
     Object.setPrototypeOf(this, AxiosError.prototype)
   }
 }
+// 错误的工厂函数，用于输出格式统一的错误信息
+export function createError(
+  message: string,
+  config: AxiosRequestConfig,
+  code?: string | null,
+  request?: any,
+  response?: AxiosResponse
+): AxiosError {
+  const error = new AxiosError(message, config, code, request, response)
+
+  return error
+}
