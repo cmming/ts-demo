@@ -9,6 +9,7 @@ import {
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './InterceptorManager'
 
+// 用于定义axios下Interceptors属性
 interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>
   response: InterceptorManager<AxiosResponse>
@@ -47,19 +48,23 @@ export default class Axios {
 
     const chain: PromiseChain[] = [
       {
+        // dispatchRequest 发送请求
         resolved: dispatchRequest,
         rejected: undefined
       }
     ]
 
     this.interceptors.request.forEach(interceptor => {
+      // 先执行后添加的
       chain.unshift(interceptor)
     })
 
     this.interceptors.response.forEach(interceptor => {
+      // 先执行先添加的
       chain.push(interceptor)
     })
 
+    // 返回个Promise对象，最终状态由then方法执行决定
     let promise = Promise.resolve(config)
 
     while (chain.length) {

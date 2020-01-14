@@ -48,6 +48,10 @@ export interface AxiosError extends Error {
 
 // 定义扩展接口
 export interface Axios {
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
   get<T = any>(url: String, config?: AxiosRequestConfig): AxiosPromise<T>
