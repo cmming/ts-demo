@@ -34,7 +34,7 @@ registerErrorRouter()
 
 registerExtendRouter()
 
-// registerInterceptorRouter()
+registerInterceptorRouter()
 
 // registerConfigRouter()
 

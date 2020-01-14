@@ -20,6 +20,7 @@ export default class InterceptorManager<T> {
       resolved,
       rejected
     })
+    // 返回拦截器的编号，用于必要时删除
     return this.interceptors.length - 1
   }
 
@@ -31,6 +32,7 @@ export default class InterceptorManager<T> {
     })
   }
 
+  // 删除拦截器
   eject(id: number): void {
     if (this.interceptors[id]) {
       this.interceptors[id] = null
