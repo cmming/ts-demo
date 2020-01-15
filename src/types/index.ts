@@ -14,6 +14,10 @@ export type Method =
   | 'patch'
   | 'PATCH'
 
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
+}
+
 export interface AxiosRequestConfig {
   url?: string
   method?: Method
@@ -27,6 +31,10 @@ export interface AxiosRequestConfig {
 
   // 字符串索引签名，方便用户自定义请求数据
   [propName: string]: any
+
+  // 请求和响应配置化
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
 
 export interface AxiosResponse<T = any> {
@@ -93,4 +101,8 @@ export interface ResolvedFn<T = any> {
 
 export interface RejectedFn {
   (error: any): any
+}
+
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
 }
