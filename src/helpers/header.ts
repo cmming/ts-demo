@@ -1,6 +1,7 @@
 import { isPlainObject, deepMerge } from './util'
 import { Method } from '../types'
 
+// 整理请求头
 function normalizeHeaderName(headers: any, normalizedName: string): void {
   if (!headers) {
     return
@@ -14,6 +15,7 @@ function normalizeHeaderName(headers: any, normalizedName: string): void {
   })
 }
 
+// 根据参数设置默认的Content-Type
 export function processHeaders(headers: any, data: any): any {
   normalizeHeaderName(headers, 'Content-Type')
 
@@ -52,7 +54,7 @@ export function flattenHeaders(headers: any, method: Method): any {
   headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
 
   const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
-
+  // 删除多余的信息
   methodsToDelete.forEach(method => {
     delete headers[method]
   })

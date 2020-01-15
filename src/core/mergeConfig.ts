@@ -65,6 +65,7 @@ export default function mergeConfig(
 
   function mergeField(key: string): void {
     const strat = strats[key] || defaultStrat
+    // 会将 headers
     config[key] = strat(config1[key], config2![key])
   }
 
