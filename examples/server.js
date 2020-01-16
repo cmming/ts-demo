@@ -4,6 +4,8 @@ const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
+const multipart = require('connect-multiparty')
+const path = require('path')
 
 const app = express()
 const compiler = webpack(WebpackConfig)
@@ -30,6 +32,11 @@ app.use(bodyParser.json())
 // app.use(bodyParser.text())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+  // uploadDir: path.resolve('./upload-file')
+}))
+
 const router = express.Router()
 
 registerSimpleRouter()
@@ -47,6 +54,8 @@ registerConfigRouter()
 registerCancelRouter()
 
 registerMoreRouter()
+
+registerUploadRouter()
 
 app.use(router)
 
@@ -177,3 +186,9 @@ function registerMoreRouter() {
   })
 }
 
+function registerUploadRouter() {
+  router.post('/upload/upload', function(req, res) {
+    console.log(req.body, req.files)
+    res.end('upload success!')
+  })
+}
