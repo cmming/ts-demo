@@ -3,6 +3,7 @@ import { parseHeaders } from '../helpers/header'
 import { createError } from '../helpers/error'
 import { isURLSameOrigin } from '../helpers/url'
 import cookie from '../helpers/cookie'
+import { isFormData } from '../helpers/util'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -16,7 +17,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       cancelToken,
       withCredentials,
       xsrfCookieName,
-      xsrfHeaderName
+      xsrfHeaderName,
+      onDownloadProgress,
+      onUploadProgress
     } = config
 
     const request = new XMLHttpRequest()
@@ -35,6 +38,20 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (xsrfValue) {
         headers[xsrfHeaderName!] = xsrfValue
       }
+    }
+
+    // 上传和下载进度查询
+    if (onDownloadProgress) {
+      request.onprogress = onDownloadProgress
+    }
+    if (onUploadProgress) {
+      request.upload.onprogress = onUploadProgress
+    }
+
+    // 根据用户是否为上传文件自动修改请求的类型
+    if (isFormData) {
+      // delete headers['Content-Type']
+      headers['Content-Type'] = 'multipart/form-data'
     }
 
     request.open(method.toUpperCase(), url!, true)

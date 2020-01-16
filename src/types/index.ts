@@ -50,6 +50,9 @@ export interface AxiosRequestConfig {
   // 用于验证xsrf的token
   xsrfCookieName?: string
   xsrfHeaderName?: string
+  // 下载和上传的进度查询
+  onDownloadProgress?: (e: ProgressEvent) => void
+  onUploadProgress?: (e: ProgressEvent) => void
 }
 
 export interface AxiosResponse<T = any> {
