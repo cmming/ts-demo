@@ -47,6 +47,9 @@ export interface AxiosRequestConfig {
   cancelToken?: CancelToken
   // 跨域携带cookies
   withCredentials?: boolean
+  // 用于验证xsrf的token
+  xsrfCookieName?: string
+  xsrfHeaderName?: string
 }
 
 export interface AxiosResponse<T = any> {
