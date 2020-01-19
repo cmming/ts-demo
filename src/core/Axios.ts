@@ -6,7 +6,7 @@ import {
   ResolvedFn,
   RejectedFn
 } from '../types'
-import dispatchRequest from './dispatchRequest'
+import dispatchRequest, { transformUrl } from './dispatchRequest'
 import InterceptorManager from './InterceptorManager'
 import mergeConfig from '../core/mergeConfig'
 
@@ -103,6 +103,11 @@ export default class Axios {
   }
   patch(url: String, data?: any, config?: AxiosRequestConfig | undefined): AxiosPromise {
     return this._requestMethodWithData('patch', url, data, config)
+  }
+
+  getUrl(config?: AxiosRequestConfig): string {
+    config = mergeConfig(this.defaults, config)
+    return transformUrl(config)
   }
 
   // 发送请求头中没有数据的请求内部函数

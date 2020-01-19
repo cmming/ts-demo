@@ -29,7 +29,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       xsrfCookieName,
       xsrfHeaderName,
       onDownloadProgress,
-      onUploadProgress
+      onUploadProgress,
+      auth,
+      validateStatus
     } = config
 
     const request = new XMLHttpRequest()
@@ -112,6 +114,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         }
       }
 
+      if (auth) {
+        // btoa base64编码，IE10+;（不支持中文）
+        headers['Authorization'] = 'Basic ' + btoa(auth.username + ':' + auth.password)
+      }
+
       // 请求头格式统一
       Object.keys(headers).forEach(name => {
         // ??
@@ -136,7 +143,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     // 处理非 200 状态码
     function handleResponse(response: AxiosResponse) {
-      if (response.status >= 200 && response.status < 300) {
+      // validateStatus 由于有默认值所以一定是存在
+      if (!validateStatus || validateStatus(response.status)) {
         resolve(response)
       } else {
         reject(
