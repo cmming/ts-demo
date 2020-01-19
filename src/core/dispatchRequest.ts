@@ -6,6 +6,7 @@ import xhr from './xhr'
 import { buildURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/header'
 import transform from './trandform'
+import { combineURL, isAbsoluteURL } from '../helpers/util'
 
 function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   // 抛错 显示 token 已经被使用
@@ -23,9 +24,12 @@ function processConfig(config: AxiosRequestConfig): void {
   config.headers = flattenHeaders(config.headers, config.method!)
 }
 
-function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url!, params)
+export function transformUrl(config: AxiosRequestConfig): string {
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
+  return buildURL(url!, params, paramsSerializer)
 }
 
 function transformResponseData(res: AxiosResponse): AxiosResponse {

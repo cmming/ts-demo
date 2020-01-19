@@ -53,6 +53,14 @@ export interface AxiosRequestConfig {
   // 下载和上传的进度查询
   onDownloadProgress?: (e: ProgressEvent) => void
   onUploadProgress?: (e: ProgressEvent) => void
+  // http 认证
+  auth?: AxiosBasicCredentials
+  // 自定义合法状态码
+  validateStatus?: (status: number) => boolean
+  // 自定义参数序列化规则
+  paramsSerializer?: (params: any) => string
+  // 定义接口的基础路径
+  baseURL?: string
 }
 
 export interface AxiosResponse<T = any> {
@@ -97,6 +105,8 @@ export interface Axios {
   put<T = any>(url: String, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
   patch<T = any>(url: String, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+  // 不发送请求的前提下根据传入的配置返回一个 url
+  getUrl(config?: AxiosRequestConfig): string
 }
 
 export interface AxiosInstance extends Axios {
@@ -127,6 +137,13 @@ export interface AxiosStatic extends AxiosInstance {
   CancelToken: CancelTokenStatic
   Cancel: CancelStatic
   isCancel: (value: any) => boolean
+
+  // 发送多个请求
+  all<T>(promises: Array<T | Promise<T>>): Promise<T[]>
+  // 所有请求都执行完成后执行的函数
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R
+  //
+  Axios: AxiosClassStatic
 }
 
 // 取消请求的方法定义
@@ -156,4 +173,14 @@ export interface Cancel {
 
 export interface CancelStatic {
   new (message?: string): Cancel
+}
+
+// http 认证 对象接口定义
+export interface AxiosBasicCredentials {
+  username: string
+  password: string
+}
+
+export interface AxiosClassStatic {
+  new (config: AxiosRequestConfig): Axios
 }
