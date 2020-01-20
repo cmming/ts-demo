@@ -36,7 +36,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     const request = new XMLHttpRequest()
 
-    request.open(method.toUpperCase(), url!, true)
+    request.open(method.toLowerCase(), url!, true)
 
     configureRequest()
 
@@ -99,10 +99,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     }
 
     function processHeaders(): void {
-      // 根据用户是否为上传文件自动修改请求的类型
-      if (isFormData) {
+      if (isFormData(data)) {
         delete headers['Content-Type']
-        // headers['Content-Type'] = 'multipart/form-data'
       }
 
       // 自动为url添加xsrf请求头

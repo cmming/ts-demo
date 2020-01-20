@@ -8,7 +8,7 @@ function normalizeHeaderName(headers: any, normalizedName: string): void {
   }
   Object.keys(headers).forEach(name => {
     // 将请求头的属性名进行规范化
-    if (name !== normalizedName && name.toUpperCase() === normalizedName.toLowerCase()) {
+    if (name !== normalizedName && name.toLowerCase() === normalizedName.toLowerCase()) {
       headers[normalizedName] = headers[name]
       delete headers[name]
     }
@@ -34,14 +34,17 @@ export function parseHeaders(headers: string): any {
   }
   // 使用换行和空格键
   headers.split('\r\n').forEach(line => {
-    let [key, val] = line.split(':')
+    // 修复 val中存在 ：，如 Date: Tue, 21 May 2019 09:23:44
+    let [key, ...vals] = line.split(':')
     key = key.trim().toLowerCase()
     if (!key) {
       return
     }
-    if (val) {
-      val = val.trim()
-    }
+    // if (val) {
+    //   val = val.trim()
+    // }
+    // 修复 val中存在 ：，如 Date: Tue, 21 May 2019 09:23:44
+    let val = vals.join(':').trim()
     parsed[key] = val
   })
   return parsed

@@ -93,3 +93,13 @@ function resolveURL(url: string): URLOrigin {
     host
   }
 }
+
+// 判读url 是否为绝对路径
+export function isAbsoluteURL(url: string): boolean {
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+}
+
+// 合并 相对路径和绝对路径
+export function combineURL(baseURL: string, relativeURL?: string): string {
+  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
+}
