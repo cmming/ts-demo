@@ -43,21 +43,11 @@ export function deepMerge(...objs: any[]): any {
 }
 
 // 判断数据是否为FormData
-export function isFormData(val: any): boolean {
+export function isFormData(val: any): val is FormData {
   return typeof val !== 'undefined' && val instanceof FormData
 }
 
 // ?? TODO (判断是否为 url参数，)
 export function isURLSearchParams(val: any): val is URLSearchParams {
   return typeof val !== 'undefined' && val instanceof URLSearchParams
-}
-
-// 判读url 是否为相对路径
-export function isAbsoluteURL(url: string): boolean {
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
-}
-
-// 合并 相对路径和绝对路径
-export function combineURL(baseURL: string, relativeURL?: string): string {
-  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
 }

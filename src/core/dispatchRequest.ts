@@ -3,10 +3,9 @@
 // ...
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types/index'
 import xhr from './xhr'
-import { buildURL } from '../helpers/url'
+import { buildURL, combineURL, isAbsoluteURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/header'
 import transform from './trandform'
-import { combineURL, isAbsoluteURL } from '../helpers/util'
 
 function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   // 抛错 显示 token 已经被使用
