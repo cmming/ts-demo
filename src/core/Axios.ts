@@ -75,6 +75,7 @@ export default class Axios {
     let promise = Promise.resolve(config)
 
     while (chain.length) {
+      // shift() 方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。
       const { resolved, rejected } = chain.shift()!
       promise = promise.then(resolved, rejected)
     }

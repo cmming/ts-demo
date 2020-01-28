@@ -20,8 +20,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     const {
       data = null,
       url,
-      method = 'get',
-      headers,
+      method,
+      // fix 当用户使用拦截器的时候去掉了所有的请求头，导致 Object.keys(headers)无法使用
+      headers = {},
       responseType,
       timeout,
       cancelToken,
@@ -36,7 +37,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     const request = new XMLHttpRequest()
 
-    request.open(method.toLowerCase(), url!, true)
+    request.open(method!.toLowerCase(), url!, true)
 
     configureRequest()
 
@@ -130,10 +131,17 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     function processCancel(): void {
       if (cancelToken) {
-        cancelToken.promise.then(reason => {
-          request.abort()
-          reject(reason)
-        })
+        cancelToken.promise
+          .then(reason => {
+            request.abort()
+            reject(reason)
+          })
+          .catch(
+            /* istanbul ignore next */
+            () => {
+              // do nothing
+            }
+          )
       }
     }
 
